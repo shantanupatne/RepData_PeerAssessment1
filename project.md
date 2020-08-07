@@ -168,41 +168,41 @@ ggplot(steps, aes(x = steps)) +
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.  
+1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend.  
 
 
 ```r
 table[, date := as.POSIXct(date, format = "%Y-%m-%d")]
-table[, `Day of Week`:= weekdays(x = date)]
-table[grepl(pattern = "Monday|Tuesday|Wednesday|Thursday|Friday", x = `Day of Week`), "weekday or weekend"] <- "weekday"
-table[grepl(pattern = "Saturday|Sunday", x = `Day of Week`), "weekday or weekend"] <- "weekend"
-table[, `weekday or weekend` := as.factor(`weekday or weekend`)]
+table[, `day`:= weekdays(x = date)]
+table[grepl(pattern = "Monday|Tuesday|Wednesday|Thursday|Friday", x = `day`), "week"] <- "weekday"
+table[grepl(pattern = "Saturday|Sunday", x = `day`), "week"] <- "weekend"
+table[, `week` := as.factor(`week`)]
 head(table, 10)
 ```
 
 ```
-##     steps       date interval Day of Week weekday or weekend
-##  1:     0 2012-10-01        0      Monday            weekday
-##  2:     0 2012-10-01        5      Monday            weekday
-##  3:     0 2012-10-01       10      Monday            weekday
-##  4:     0 2012-10-01       15      Monday            weekday
-##  5:     0 2012-10-01       20      Monday            weekday
-##  6:     0 2012-10-01       25      Monday            weekday
-##  7:     0 2012-10-01       30      Monday            weekday
-##  8:     0 2012-10-01       35      Monday            weekday
-##  9:     0 2012-10-01       40      Monday            weekday
-## 10:     0 2012-10-01       45      Monday            weekday
+##     steps       date interval    day    week
+##  1:     0 2012-10-01        0 Monday weekday
+##  2:     0 2012-10-01        5 Monday weekday
+##  3:     0 2012-10-01       10 Monday weekday
+##  4:     0 2012-10-01       15 Monday weekday
+##  5:     0 2012-10-01       20 Monday weekday
+##  6:     0 2012-10-01       25 Monday weekday
+##  7:     0 2012-10-01       30 Monday weekday
+##  8:     0 2012-10-01       35 Monday weekday
+##  9:     0 2012-10-01       40 Monday weekday
+## 10:     0 2012-10-01       45 Monday weekday
 ```
 
 2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.  
 
 
 ```r
-intervals <- table[, c(lapply(.SD, mean, na.rm = TRUE)), .SDcols = c("steps"), by = .(interval, `weekday or weekend`)] 
+intervals <- table[, c(lapply(.SD, mean, na.rm = TRUE)), .SDcols = c("steps"), by = .(interval, `week`)] 
 
-ggplot(intervals , aes(x = interval , y = steps, color=`weekday or weekend`)) + geom_line() + 
+ggplot(intervals , aes(x = interval , y = steps, color=`week`)) + geom_line() + 
   labs(title = "Avg. Daily Steps by Weektype", x = "Interval", y = "No. of Steps") + 
-  facet_wrap(~`weekday or weekend` , ncol = 1, nrow=2)
+  facet_wrap(~`week` , ncol = 1, nrow=2)
 ```
 
 ![](figure/unnamed-chunk-13-1.png)<!-- -->
